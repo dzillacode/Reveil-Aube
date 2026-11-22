@@ -24,11 +24,6 @@ Fichiers : `index.html` (l'application) et `sw.js` (cache hors ligne).
 3. Lancez l'app depuis cette icône : elle s'ouvre en plein écran.
 4. Touchez **TOUCHER POUR ACTIVER**. Il faut le refaire à chaque ouverture.
 
-## Les deux applis coexistent
-« Réveil » et « Aube » peuvent rester toutes les deux sur l'écran d'accueil. Elles ont chacune leurs alarmes, leurs réglages et leur cache : modifier l'une ne change rien à l'autre.
-
-Attention : n'en laissez qu'**une seule** ouverte la nuit. iOS ne fait tourner que l'app au premier plan.
-
 ## 3. Le lever de soleil
 Réglages › **Lever de soleil** :
 - **Lumière de réveil** : active ou désactive l'effet.
