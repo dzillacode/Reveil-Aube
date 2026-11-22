@@ -43,7 +43,11 @@ body.dawnlight{
   --card:rgba(46,8,0,.10); --shadow:0 14px 32px rgba(90,25,0,.35); --line:#ffe0b8;
 }
 /* Les panneaux gardent toujours leurs couleurs rouges sur noir */
-#panel, #toast, #warn, #unlock{
+#panel{
+  /* dans les réglages, les rouges secondaires sont plus clairs : lisibles en luminosité basse */
+  --r1:#ff2a1f; --r2:#e0301f; --r3:#7a1a0e; --r4:#3a0904; --glow:0 0 24px rgba(255,42,31,.30);
+}
+#toast, #warn, #unlock{
   --r1:#ff2a1f; --r2:#b3150d; --r3:#4a0805; --r4:#1e0302; --glow:0 0 24px rgba(255,42,31,.30);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:rgba(0,0,0,0)}
@@ -100,37 +104,43 @@ body.ringing #face{visibility:hidden}
 #ss{font-size:.16em;vertical-align:top;margin-left:.2em;color:var(--r2);letter-spacing:.05em;text-shadow:none}
 /* Date : Medium (500), plus grande et plus vive */
 #date{margin-top:2.6vh;font-size:2.8vw;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:var(--r1);padding-left:.3em}
-/* Météo : environ 1,6 fois plus grande que dans « Réveil » */
-#wx{margin-top:4vh;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;font-size:2.2vw;letter-spacing:.08em;color:var(--r2);text-transform:uppercase;min-height:7vw;max-width:94vw}
-#wx .now svg{width:7.4vw;height:7.4vw;display:block}
-#wx .now{display:flex;align-items:center;color:var(--r1)}
-#wx .now .t{font-size:5.6vw;margin-left:1.4vw;letter-spacing:0;line-height:1}
+/* Météo : l'état du temps en haut, la ville en plus petit, puis une rangée
+   « maintenant » (en grand) + les 7 prochaines heures (icône et température) */
+#wx{margin-top:3vh;display:flex;flex-direction:column;align-items:center;color:var(--r2);text-transform:uppercase;letter-spacing:.08em;max-width:94vw}
+/* ligne sous la rangée : ville (plus légère) : prévision · risque de pluie — même taille */
+#wx .wcity{font-weight:300;color:var(--r2)}
+#wx .wcond{font-weight:600;color:var(--r1)}
+#wx .wstale{color:var(--r2)}
+#wx .wrow{display:flex;align-items:flex-end;margin-top:.5vh;position:relative;top:-2.5vh} /* rangée remontée, sans déplacer le reste */
+#wx .wc{display:flex;flex-direction:column;align-items:center;width:8.4vw}
+#wx .wh{font-size:1.45vw;font-weight:500;letter-spacing:.06em}
+#wx .wc svg{width:4.2vw;height:4.2vw;display:block;margin:.7vh 0 .5vh;color:var(--r1)}
+#wx .wt{font-size:2.3vw;color:var(--r1);letter-spacing:0;line-height:1.1}
+#wx .wnow{width:13vw;margin-right:1.4vw}
+#wx .wnow .wh{color:var(--r1)}
+#wx .wnow svg{width:7vw;height:7vw}
+#wx .wnow .wt{font-size:5.4vw;line-height:1}
+#wx .wdet{font-size:1.75vw;margin-top:2.2vh;letter-spacing:.1em;text-align:center;line-height:1.5}
+#wx .wdet b{font-weight:500;color:var(--r1);letter-spacing:.04em}
 #wx .mx{color:var(--r1);white-space:nowrap}
 #wx .ar{display:inline-block;width:.72em;height:.9em;vertical-align:-.08em;margin-right:.3em}
 /* icônes d'intensité pluie / vent, entre le mot et la valeur */
 #wx .wi{display:inline-block;width:1.3em;height:1.3em;vertical-align:-.32em;margin:0 .4em;color:var(--r1)}
-/* Météo à la manière de meteo.be : une phrase de temps, puis les chiffres clés */
-#wx .col{display:flex;flex-direction:column;line-height:1.5;text-align:left}
-#wx .col .c1{color:var(--r1);font-size:1.12em;font-weight:500;letter-spacing:.06em}
-#wx .col .c3{font-size:.9em}
-#wx .sep{width:1px;height:7.5vw;background:var(--r3);margin:0 2.6vw}
-body.night:not(.peek) #wx .c3{display:none}
-#next{margin-top:4vh;font-size:1.7vw;letter-spacing:.34em;color:var(--r2);text-transform:uppercase;padding-left:.34em}
+body.night:not(.peek) #wx .wrisk{display:none}
+#next{margin-top:3.6vh;font-size:1.7vw;letter-spacing:.34em;color:var(--r2);text-transform:uppercase;padding-left:.34em}
 #next b{font-weight:500;color:var(--r1)}
 
 @media (orientation:portrait){
   #clock{font-size:30vw}
   #date{font-size:3.6vw}
-  #wx{font-size:3vw}
-  #wx .now svg{width:10vw;height:10vw}
-  #wx .now .t{font-size:7.6vw}
-  /* en portrait : météo en colonne, centrée */
-  #wx{flex-direction:column}
-  #wx .sep{display:none}
-  #wx .col{text-align:center;align-items:center;margin-top:1.6vh}
-  /* vent et soleil chacun sur sa ligne (évite une coupure au milieu) */
-  #wx .c3 .p3{display:block}
-  #wx .c3 .d3{display:none}
+  #wx .wc{width:10.4vw}
+  #wx .wh{font-size:2vw}
+  #wx .wc svg{width:5.6vw;height:5.6vw}
+  #wx .wt{font-size:3vw}
+  #wx .wnow{width:15vw;margin-right:1vw}
+  #wx .wnow svg{width:9vw;height:9vw}
+  #wx .wnow .wt{font-size:7vw}
+  #wx .wdet{font-size:2.4vw}
   #next{font-size:2.4vw}
 }
 
@@ -144,9 +154,9 @@ body.night:not(.peek) #wx .c3{display:none}
 body.dawnlight #bar .btn{background:transparent}
 body.dawnlight #bar .btn.solid{background:var(--r1);color:#ffc070}
 .btn{
-  display:inline-block;border:1px solid var(--r2);color:var(--r1);background:#000;
-  font-size:14px;letter-spacing:.28em;text-transform:uppercase;padding:15px 24px 15px 28px;
-  border-radius:2px;margin:6px;white-space:nowrap;
+  display:inline-block;border:2px solid var(--r2);color:var(--r1);background:#000;
+  font-size:16px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;padding:16px 26px 16px 30px;
+  border-radius:4px;margin:6px;white-space:nowrap;
 }
 .btn.solid{background:var(--r1);border-color:var(--r1);color:#000}
 .btn.ghost{border-color:var(--r3);color:var(--r2)}
@@ -159,65 +169,67 @@ body.dawnlight #bar .btn.solid{background:var(--r1);color:#ffc070}
   -webkit-transition:opacity .2s,-webkit-transform .2s;transition:opacity .2s,transform .2s;
 }
 #panel.closed{opacity:0;pointer-events:none;-webkit-transform:translateY(14px);transform:translateY(14px)}
-#tabs{display:flex;border-bottom:1px solid var(--r3);padding:0 3vw;flex-shrink:0}
-.tab{flex:1;padding:24px 0 22px;text-align:center;letter-spacing:.32em;font-size:13px;color:var(--r2);border-bottom:2px solid transparent;text-transform:uppercase}
+/* Réglages : textes plus grands et plus épais (lisibles avec la luminosité au minimum) */
+#panel{font-weight:500}
+#tabs{display:flex;border-bottom:2px solid var(--r3);padding:0 3vw;flex-shrink:0}
+.tab{flex:1;padding:26px 0 23px;text-align:center;letter-spacing:.26em;font-size:16px;font-weight:600;color:var(--r2);border-bottom:3px solid transparent;text-transform:uppercase}
 .tab.on{color:var(--r1);border-bottom-color:var(--r1)}
-.tab.x{flex:0 0 80px;font-size:22px;letter-spacing:0}
-#pbody{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:10px 5vw 80px}
-h3{font-weight:400;font-size:11px;letter-spacing:.4em;color:var(--r2);margin:34px 0 10px;text-transform:uppercase}
-.note{font-size:12px;letter-spacing:.12em;color:var(--r2);line-height:1.7;margin:8px 0}
-.row{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--r4);padding:14px 0;min-height:60px}
-.row .lbl{font-size:15px;letter-spacing:.12em}
-.row .lbl small{display:block;font-size:11px;letter-spacing:.2em;color:var(--r2);margin-top:5px;text-transform:uppercase}
+.tab.x{flex:0 0 84px;font-size:28px;letter-spacing:0}
+#pbody{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 5vw 90px}
+h3{font-weight:600;font-size:14px;letter-spacing:.3em;color:var(--r2);margin:38px 0 12px;text-transform:uppercase}
+.note{font-size:15px;letter-spacing:.05em;color:var(--r2);line-height:1.6;margin:10px 0}
+.row{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--r4);padding:16px 0;min-height:72px}
+.row .lbl{font-size:19px;letter-spacing:.06em}
+.row .lbl small{display:block;font-size:13px;font-weight:500;letter-spacing:.12em;color:var(--r2);margin-top:6px;text-transform:uppercase}
 .al{flex:1}
-.al .t{font-size:60px;line-height:1}
-.al .m{font-size:11px;letter-spacing:.24em;color:var(--r2);margin-top:6px;text-transform:uppercase}
-.row.dis .al{opacity:.4}
+.al .t{font-size:64px;line-height:1}
+.al .m{font-size:13px;font-weight:500;letter-spacing:.16em;color:var(--r2);margin-top:8px;text-transform:uppercase}
+.row.dis .al{opacity:.45}
 
-/* Interrupteur */
-.sw{position:relative;width:60px;height:32px;border:1px solid var(--r3);border-radius:16px;flex-shrink:0}
-.sw i{position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:12px;background:var(--r3);-webkit-transition:-webkit-transform .2s;transition:transform .2s}
+/* Interrupteur (plus grand) */
+.sw{position:relative;width:70px;height:38px;border:2px solid var(--r3);border-radius:19px;flex-shrink:0}
+.sw i{position:absolute;top:2px;left:2px;width:30px;height:30px;border-radius:15px;background:var(--r3);-webkit-transition:-webkit-transform .2s;transition:transform .2s}
 .sw.on{border-color:var(--r1)}
-.sw.on i{background:var(--r1);-webkit-transform:translateX(28px);transform:translateX(28px)}
+.sw.on i{background:var(--r1);-webkit-transform:translateX(32px);transform:translateX(32px)}
 
 /* Champs */
 input,select{
   -webkit-appearance:none;appearance:none;background:#000;color:var(--r1);
-  border:1px solid var(--r3);border-radius:2px;font:inherit;font-size:18px;padding:13px 15px;width:100%;
+  border:2px solid var(--r3);border-radius:4px;font:inherit;font-size:21px;font-weight:500;padding:14px 16px;width:100%;
   -webkit-user-select:text;user-select:text;outline:none;
 }
 input:focus{border-color:var(--r1)}
 input::-webkit-input-placeholder{color:var(--r3)}
 input::placeholder{color:var(--r3)}
-input[type=time]{font-size:56px;font-weight:100;font-family:"HelveticaNeue-UltraLight","Helvetica Neue",sans-serif;width:auto;padding:6px 18px;min-width:220px}
-.small-in{width:auto;min-width:130px;font-size:18px!important;padding:10px 14px!important;min-height:0}
-select{width:auto;min-width:120px;font-size:16px;padding:10px 14px}
+input[type=time]{font-size:58px;font-weight:300;font-family:"HelveticaNeue-Light","Helvetica Neue",sans-serif;width:auto;padding:6px 18px;min-width:230px}
+.small-in{width:auto;min-width:140px;font-size:22px!important;padding:12px 16px!important;min-height:0}
+select{width:auto;min-width:140px;font-size:19px;padding:12px 16px}
 
 /* Choix de la police : grille de cartes avec aperçu */
 .fonts{display:flex;flex-wrap:wrap;margin-right:-12px}
 .fontcard{
-  width:30%;width:calc(33.33% - 12px);margin:0 12px 12px 0;padding:16px 10px 12px;
-  border:1px solid var(--r3);border-radius:14px;text-align:center;
+  width:30%;width:calc(33.33% - 12px);margin:0 12px 12px 0;padding:16px 10px 14px;
+  border:2px solid var(--r3);border-radius:14px;text-align:center;
 }
-.fontcard.on{border-color:var(--r1);background:rgba(255,42,31,.08)}
-.fontcard .fs{display:block;font-size:46px;line-height:1.05;color:var(--r1);white-space:nowrap}
-.fontcard .fn{display:block;margin-top:8px;font-size:10px;letter-spacing:.18em;color:var(--r2);text-transform:uppercase}
+.fontcard.on{border-color:var(--r1);background:rgba(255,42,31,.1)}
+.fontcard .fs{display:block;font-size:50px;line-height:1.05;color:var(--r1);white-space:nowrap}
+.fontcard .fn{display:block;margin-top:9px;font-size:12px;font-weight:600;letter-spacing:.12em;color:var(--r2);text-transform:uppercase}
 .fontcard.on .fn{color:var(--r1)}
 @media (orientation:portrait){.fontcard{width:calc(50% - 12px)}}
 
 /* Curseurs de durée */
 .row.rng{display:block}
-.rctl{display:flex;align-items:center;margin-top:14px}
-.rctl .ib{margin:0;min-width:52px;height:46px;font-size:22px;letter-spacing:0;padding:0;border-radius:10px}
-.rval{min-width:84px;text-align:right;font-size:20px;color:var(--r1)}
+.rctl{display:flex;align-items:center;margin-top:16px}
+.rctl .ib{margin:0;min-width:58px;height:52px;font-size:28px;letter-spacing:0;padding:0;border-radius:10px}
+.rval{min-width:92px;text-align:right;font-size:23px;font-weight:600;color:var(--r1)}
 /* Curseur entièrement dessiné par l'appli (pas le curseur de Safari, dont iOS 12
    impose son bouton blanc) :
    - .sl-line : fine ligne rouge sur toute la largeur, sous le bouton rond ;
    - .sl-fill : partie déjà parcourue, en rouge vif ;
    - .sl-knob : bouton rond rouge. Positions calculées en JS (sliderPos). */
 .sld{position:relative;-webkit-flex:1;flex:1;height:46px;margin:0 14px;cursor:pointer}
-.sl-line{position:absolute;left:0;right:0;top:50%;height:2px;margin-top:-1px;background:#a3160e;border-radius:1px}
-.sl-fill{position:absolute;left:0;top:50%;height:3px;margin-top:-1.5px;background:#ff2a1f;border-radius:2px}
+.sl-line{position:absolute;left:0;right:0;top:50%;height:3px;margin-top:-1.5px;background:#a3160e;border-radius:2px}
+.sl-fill{position:absolute;left:0;top:50%;height:4px;margin-top:-2px;background:#ff2a1f;border-radius:2px}
 .sl-knob{
   position:absolute;top:50%;width:30px;height:30px;margin-top:-15px;border-radius:15px;
   background:#ff2a1f;box-shadow:0 0 0 4px rgba(255,42,31,.18),0 0 14px rgba(255,42,31,.5);
@@ -225,18 +237,18 @@ select{width:auto;min-width:120px;font-size:16px;padding:10px 14px}
 .sld.drag .sl-knob{box-shadow:0 0 0 8px rgba(255,42,31,.22),0 0 18px rgba(255,42,31,.6)}
 
 .days{display:flex;flex-wrap:wrap}
-.day{width:52px;height:52px;border:1px solid var(--r3);border-radius:26px;display:flex;align-items:center;justify-content:center;margin:0 10px 10px 0;color:var(--r2);font-size:15px}
+.day{width:58px;height:58px;border:2px solid var(--r3);border-radius:29px;display:flex;align-items:center;justify-content:center;margin:0 12px 12px 0;color:var(--r2);font-size:19px;font-weight:600}
 .day.on{background:var(--r1);border-color:var(--r1);color:#000}
 
 /* Stations */
-.st{display:flex;align-items:center;padding:11px 0;border-bottom:1px solid var(--r4)}
-.st .n{flex:1;font-size:16px;letter-spacing:.06em;overflow:hidden}
-.st .n small{display:block;color:var(--r2);font-size:10px;letter-spacing:.2em;margin-top:4px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.st.dis{opacity:.35}
-.ib{min-width:50px;height:44px;border:1px solid var(--r3);margin-left:8px;display:flex;align-items:center;justify-content:center;font-size:12px;letter-spacing:.2em;padding:0 12px;text-transform:uppercase;color:var(--r1)}
+.st{display:flex;align-items:center;padding:13px 0;border-bottom:2px solid var(--r4)}
+.st .n{flex:1;font-size:19px;letter-spacing:.04em;overflow:hidden}
+.st .n small{display:block;color:var(--r2);font-size:12px;font-weight:500;letter-spacing:.14em;margin-top:5px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.st.dis{opacity:.4}
+.ib{min-width:56px;height:50px;border:2px solid var(--r3);border-radius:6px;margin-left:10px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;letter-spacing:.14em;padding:0 14px;text-transform:uppercase;color:var(--r1)}
 .ib.on{background:var(--r1);color:#000;border-color:var(--r1)}
-.grp{font-size:10px;letter-spacing:.4em;color:var(--r3);margin:18px 0 2px}
-.banner{border:1px solid var(--r1);padding:14px 16px;margin-top:22px;font-size:12px;letter-spacing:.3em;text-transform:uppercase}
+.grp{font-size:12px;font-weight:600;letter-spacing:.3em;color:var(--r3);margin:20px 0 4px}
+.banner{border:2px solid var(--r1);padding:16px 18px;margin-top:22px;font-size:14px;font-weight:600;letter-spacing:.24em;text-transform:uppercase}
 .flex{display:flex;align-items:center}
 .flex > input{flex:1}
 
@@ -326,7 +338,7 @@ body.dawnlight #ring .stp, body.dawnlight #ring .stp small{color:#ffc070}
 
 <div id="unlock">
   <div class="big">TOUCHER POUR ACTIVER</div>
-  <p>Le son doit être activé d'un toucher à chaque ouverture de l'application.<br>Laissez ensuite l'iPad sur cet écran, branché.<br><br>Aube · version 7</p>
+  <p>Le son doit être activé d'un toucher à chaque ouverture de l'application.<br>Laissez ensuite l'iPad sur cet écran, branché.<br><br>Aube · version 12</p>
 </div>
 
 <div id="toast"></div>
@@ -395,6 +407,8 @@ var DEF = {
   dawnMin: 3,        // durée du lever de soleil quand il démarre avec la sonnerie
   dawnBefore: 0,     // minutes de lumière avant la sonnerie (0 = non)
   font: 'light',     // police de l'heure (voir FONTS)
+  wxStep: 1,         // prévisions : toutes les heures (1) ou toutes les 3 heures (3)
+  wxDetails: true,   // ligne « Risque de pluie » sous les prévisions
   city: { name: 'Bruxelles', lat: 50.8503, lon: 4.3517 },
   defStation: null
 };
@@ -434,7 +448,7 @@ function fitClock() {
   var w = p.getBoundingClientRect().width || 240;
   var W = window.innerWidth, H = window.innerHeight, land = W >= H;
   var size = 100 * (W * (land ? .75 : .74)) / w;
-  size = Math.min(size, land ? H * .48 : H * .34);   // jamais trop haute (polices étroites)
+  size = Math.min(size, land ? H * .44 : H * .32);   // jamais trop haute (polices étroites)
   c.style.fontSize = Math.round(size) + 'px';
 }
 
@@ -936,8 +950,9 @@ function fetchWx() {
   var c = S.city;
   var url = 'https://api.open-meteo.com/v1/forecast?latitude=' + c.lat + '&longitude=' + c.lon +
     '&current=temperature_2m,weather_code,is_day,wind_speed_10m,wind_direction_10m,cloud_cover,precipitation,rain,showers,snowfall' +
-    '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_sum,sunrise,sunset' +
-    '&wind_speed_unit=kmh&timezone=Europe%2FBrussels&forecast_days=1';
+    '&hourly=temperature_2m,weather_code,is_day,precipitation_probability,precipitation' +
+    '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_sum' +
+    '&wind_speed_unit=kmh&timezone=Europe%2FBrussels&forecast_days=2';
   getJSON(url, 15000).then(function (j) {
     wxLoading = false;
     if (!j || !j.current) throw new Error('réponse vide');
@@ -951,27 +966,47 @@ function renderWx() {
   var el = $('wx');
   if (!WX || !WX.d || !WX.d.current) { el.innerHTML = '<span class="dim">Météo indisponible</span>'; return; }
   try {
-    var j = WX.d, c = j.current, dl = j.daily, S3 = '&nbsp;&nbsp;·&nbsp;&nbsp;';
-    var code = liveCode(c);   // même code pour l'icône et la phrase
-    var h = '<div class="now">' + icon(code, c.is_day) + '<span class="t thin num">' + Math.round(c.temperature_2m) + '°</span></div>';
-    // ligne 1 : phrase de temps ; ligne 2 : ville, ↑ maxima, ↓ minima, pluie ;
-    // ligne 3 : vent et soleil (masquée la nuit)
-    var l2 = esc(WX.city || '') + S3 +
-             '<span class="mx">' + AR_UP + Math.round(dl.temperature_2m_max[0]) + '°</span>&nbsp;&nbsp;&nbsp;' +
-             '<span class="mx">' + AR_DOWN + Math.round(dl.temperature_2m_min[0]) + '°</span>' + S3 +
-             'Pluie' + RAIN_ICONS[rainLevel(dl.precipitation_sum ? dl.precipitation_sum[0] : 0, dl.precipitation_probability_max[0])] +
-             (dl.precipitation_probability_max[0] || 0) + '%';
-    var l3 = [];
-    if (c.wind_speed_10m != null) {
-      var ws = Math.round(c.wind_speed_10m);
-      l3.push('Vent' + WIND_ICONS[windLevel(ws)] + windWord(ws) +
-              (ws >= 6 && c.wind_direction_10m != null ? ' ' + windDir(c.wind_direction_10m) : ''));
+    var j = WX.d, c = j.current, dl = j.daily, hr = j.hourly, S3 = '&nbsp;&nbsp;·&nbsp;&nbsp;';
+    var code = liveCode(c), now = new Date();   // même code pour l'icône du moment et la phrase
+    // 1) maintenant (en grand) + les 7 prochaines heures (ou toutes les 3 h, selon le réglage)
+    var h = '<div class="wrow"><div class="wc wnow">' +
+         icon(code, c.is_day) + '<span class="wt thin num">' + Math.round(c.temperature_2m) + '°</span></div>';
+    if (hr && hr.time) {
+      var key = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate()) + 'T' + pad(now.getHours()) + ':00';
+      var idx = hr.time.indexOf(key), step = +S.wxStep || 1;
+      if (idx >= 0) {
+        for (var k = 1; k <= 7; k++) {
+          var q = idx + k * step;
+          if (q >= hr.time.length) break;
+          h += '<div class="wc"><span class="wh num">' + hr.time[q].substr(11, 2) + ' h</span>' +
+               icon(hr.weather_code[q], hr.is_day[q]) +
+               '<span class="wt num">' + Math.round(hr.temperature_2m[q]) + '°</span></div>';
+        }
+      }
     }
-    if (dl.sunrise && dl.sunset) l3.push('Soleil ' + String(dl.sunrise[0]).substr(11, 5) + ' – ' + String(dl.sunset[0]).substr(11, 5));
-    if (Date.now() - WX.t > 40 * 60000) l3.push('Màj ' + hhmm(WX.t));
-    h += '<div class="sep"></div><div class="col"><span class="c1">' + wxPhrase(code, c.is_day) + '</span>' +
-         '<span class="num">' + l2 + '</span>' +
-         (l3.length ? '<span class="c3 num"><span class="p3">' + l3.join('</span><span class="d3">' + S3 + '</span><span class="p3">') + '</span></span>' : '') + '</div>';
+    h += '</div>';
+    // 2) une seule ligne sous la rangée : « BRUXELLES : CIEL COUVERT · RISQUE DE PLUIE [icône] 0% »
+    //    (ville en graisse plus légère ; le risque de pluie est facultatif et masqué la nuit)
+    var line = (WX.city ? '<span class="wcity">' + esc(WX.city) + '&nbsp;:</span> ' : '') +
+               '<span class="wcond">' + wxPhrase(code, c.is_day) + '</span>';
+    if (Date.now() - WX.t > 40 * 60000) line += '<span class="wstale">' + S3 + 'màj ' + hhmm(WX.t) + '</span>';
+    if (S.wxDetails) {
+      var prob = null, mm = 0;
+      if (hr && hr.precipitation_probability && idx >= 0) {
+        var last = Math.min(hr.time.length - 1, idx + 7 * step);
+        for (var p = idx; p <= last; p++) {
+          prob = Math.max(prob || 0, +hr.precipitation_probability[p] || 0);
+          mm += +(hr.precipitation ? hr.precipitation[p] : 0) || 0;
+        }
+      } else if (dl && dl.precipitation_probability_max) {      // ancienne donnée en cache : la journée
+        prob = +dl.precipitation_probability_max[0] || 0;
+        mm = dl.precipitation_sum ? +dl.precipitation_sum[0] || 0 : 0;
+      }
+      if (prob != null) {
+        line += '<span class="wrisk">' + S3 + 'Risque de pluie' + RAIN_ICONS[rainLevel(mm, prob)] + '<b>' + Math.round(prob) + '%</b></span>';
+      }
+    }
+    h += '<div class="wdet num">' + line + '</div>';
     el.innerHTML = h;
   } catch (e) { el.innerHTML = '<span class="dim">Météo indisponible</span>'; }
 }
@@ -1269,7 +1304,10 @@ function renderPanel() {
   }
   else if (P.view === 'settings') {
     h += '<h3>Météo</h3><div class="row"><div class="lbl">' + esc(S.city.name) + '<small>Ville actuelle</small></div></div>' +
-         '<input type="search" id="cityQ" placeholder="Rechercher une ville…" style="margin-top:12px"><div id="cityRes"></div>';
+         '<input type="search" id="cityQ" placeholder="Rechercher une ville…" style="margin-top:12px"><div id="cityRes"></div>' +
+         '<div class="row"><div class="lbl">Prévisions affichées<small>Les 7 prochaines…</small></div><select data-set="wxStep">' +
+           [[1, 'Heures'], [3, 'Tranches de 3 h']].map(function (o) { return '<option value="' + o[0] + '"' + (+S.wxStep === o[0] ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select></div>' +
+         '<div class="row"><div class="lbl">Risque de pluie sous les prévisions<small>Sur les heures affichées</small></div>' + sw(S.wxDetails, 'set-toggle', 'wxDetails') + '</div>';
     h += '<h3>Mode nuit</h3>' +
          '<div class="row"><div class="lbl">Automatique<small>Rouge très sombre la nuit</small></div>' + sw(S.autoNight, 'set-toggle', 'autoNight') + '</div>' +
          '<div class="row"><div class="lbl">Début</div><input type="time" class="small-in num" data-set="nightStart" value="' + S.nightStart + '"></div>' +
@@ -1297,7 +1335,7 @@ function renderPanel() {
     h += '<div style="margin-top:28px"><button class="btn" data-act="test">Tester l\'alarme dans 1 min</button>' +
          '<button class="btn" data-act="dawntest">Tester le lever de soleil (30 s)</button>' +
          '<button class="btn ghost" data-act="refresh">Actualiser météo et radios</button></div>';
-    h += '<h3>État</h3><p class="note">Aube · version 7<br>Audio : ' + (AC ? AC.state : 'non initialisé') + (fadeGain ? ' · montée dispo' : ' · montée indispo') +
+    h += '<h3>État</h3><p class="note">Aube · version 12<br>Audio : ' + (AC ? AC.state : 'non initialisé') + (fadeGain ? ' · montée dispo' : ' · montée indispo') +
          '<br>Météo : ' + (WX ? 'mise à jour ' + hhmm(WX.t) : 'jamais') +
          '<br>Radios : ' + (STATIONS ? STATIONS.length + ' stations belges' : 'non chargées') +
          '<br>Connexion : ' + (PAGE_HTTPS ? 'HTTPS' : 'HTTP') +
@@ -1423,7 +1461,7 @@ function act(name, el) {
       if (!S.defStation) { toast('Choisissez d\'abord une station ★'); break; }
       playStream(S.defStation, {}); sleepAt = Date.now() + (+v) * 60000; closePanel(); toast('Arrêt dans ' + v + ' min'); break;
 
-    case 'set-toggle': S[v] = !S[v]; save(); renderPanel(); updNight(); render(); break;
+    case 'set-toggle': S[v] = !S[v]; save(); renderPanel(); updNight(); render(); renderWx(); break;
     case 'font': S.font = v; save(); fitClock(); renderPanel(); break;
     case 'dawnoff': dawnOff(); break;
     case 'rstep':   // boutons − / + des curseurs de durée
@@ -1496,9 +1534,10 @@ document.addEventListener('change', function (e) {
   var k = e.target.getAttribute && e.target.getAttribute('data-set');
   if (!k) return;
   var val = e.target.value;
-  if (k === 'snooze' || k === 'fadeSec' || k === 'dawnMin' || k === 'dawnBefore') val = +val;
+  if (k === 'snooze' || k === 'fadeSec' || k === 'dawnMin' || k === 'dawnBefore' || k === 'wxStep') val = +val;
   if ((k === 'nightStart' || k === 'nightEnd') && !val) return;
   S[k] = val; save(); updNight();
+  if (k === 'wxStep') renderWx();
 });
 
 function doUnlock() {
