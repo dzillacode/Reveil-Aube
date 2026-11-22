@@ -2,7 +2,7 @@
    même sans connexion. Les flux radio et la météo ne sont pas interceptés.
    Le cache porte un nom propre à Aube et on ne supprime QUE les anciens caches
    d'Aube : l'appli « Réveil », publiée sur le même domaine, n'est jamais touchée. */
-var CACHE = 'aube-v1';
+var CACHE = 'aube-v7';
 
 self.addEventListener('install', function (e) {
   e.waitUntil(caches.open(CACHE).then(function (c) {
